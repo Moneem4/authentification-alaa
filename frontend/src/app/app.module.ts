@@ -18,8 +18,8 @@ import { NavigationComponent } from "./components/navigation/navigation.componen
 import { SignupComponent } from "./components/signup/signup.component";
 import { LoginComponent } from "./components/login/login.component";
 import { HomeComponent } from "./components/home/home.component";
-import { PostsComponent } from "./components/posts/posts.component";
-import { CreatePostComponent } from "./components/create-post/create-post.component";
+//import { PostsComponent } from "./components/posts/posts.component";
+import { AfterConnectComponent } from "./components/afterConnect/after-connect.component";
 
 import { AuthInterceptorService } from "./services/auth-interceptor.service";
 
@@ -28,10 +28,11 @@ import { AuthInterceptorService } from "./services/auth-interceptor.service";
     AppComponent,
     NavigationComponent,
     SignupComponent,
+    AfterConnectComponent,
     LoginComponent,
     HomeComponent,
-    PostsComponent,
-    CreatePostComponent,
+   // PostsComponent,
+
   ],
   imports: [
     BrowserModule,

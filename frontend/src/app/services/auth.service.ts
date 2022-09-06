@@ -13,9 +13,10 @@ import { ErrorHandlerService } from "./error-handler.service";
 })
 export class AuthService {
   private url = "http://localhost:3000/auth";
-
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: string;
   isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
-  userId: Pick<User, "id">;
+  userName: string;
 
   httpOptions: { headers: HttpHeaders } = {
     headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -25,8 +26,14 @@ export class AuthService {
     private http: HttpClient,
     private errorHandlerService: ErrorHandlerService,
     private router: Router
-  ) {}
-
+  )
+  {
+     //this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('userName')));
+  this.currentUser =localStorage.getItem('userName')
+}
+public get currentUserValue(): string {
+  return localStorage.getItem('userName');
+}
   signup(user: Omit<User, "id">): Observable<User> {
     return this.http
       .post<User>(`${this.url}/signup`, user, this.httpOptions)
@@ -41,22 +48,23 @@ export class AuthService {
     password: Pick<User, "password">
   ): Observable<{
     token: string;
-    userId: Pick<User, "id">;
+    userName: string;
   }> {
     return this.http
       .post(`${this.url}/login`, { email, password }, this.httpOptions)
       .pipe(
         first(),
-        tap((tokenObject: { token: string; userId: Pick<User, "id"> }) => {
-          this.userId = tokenObject.userId;
+        tap((tokenObject: { token: string; userName: string }) => {
+          this.userName = tokenObject.userName;
           localStorage.setItem("token", tokenObject.token);
+          localStorage.setItem("userName", tokenObject.userName);
           this.isUserLoggedIn$.next(true);
-          this.router.navigate(["posts"]);
+          this.router.navigate(["after-connect"]);
         }),
         catchError(
           this.errorHandlerService.handleError<{
             token: string;
-            userId: Pick<User, "id">;
+            userName: string;
           }>("login")
         )
       );

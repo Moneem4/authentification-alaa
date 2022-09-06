@@ -1,23 +1,34 @@
 <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+  <div *ngIf="showErrorMessage">
+    <h1 style="color: red;">Invalid email or password, Please verify your credentiels !</h1>
+  </div>
   <mat-form-field>
     <mat-label>Email</mat-label>
-    <input matInput placeholder="Ex. Jon" formControlName="email" />
+    <input matInput placeholder="Ex. Jon" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+      <div *ngIf="f.email.errors.required">Email is required</div>
+  </div>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Password</mat-label>
     <input
       matInput
       type="password"
-      placeholder="Ex. Jon"
+      placeholder="******"
       formControlName="password"
+      class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
     />
+    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+      <div *ngIf="f.password.errors.required">Password is required</div>
+    </div>
   </mat-form-field>
   <button
-    color="accent"
-    [disabled]="!loginForm.valid"
-    mat-raised-button
-    type="submit"
-  >
-    <span>Log in</span>
-  </button>
+  color="accent"
+  [disabled]="!loginForm.valid"
+  mat-raised-button
+  type="submit"
+>
+  <span>Log in</span>
+</button>
+
 </form>
